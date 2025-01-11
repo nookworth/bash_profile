@@ -156,11 +156,6 @@ function openpr() {
             "base": "master"
         }')
     
-    echo "Curl response: $response"
-    echo "Owner: $owner"
-echo "Repo: $repo"
-echo "PAT: $pat"
-
     # Extract the HTTP status code and response body
     local http_status=${response:(-3)} # Last 3 characters are the HTTP status code
     local body_response=$(cat response.json)
@@ -179,9 +174,11 @@ echo "PAT: $pat"
 }
 
 # Misc
+alias cpbash="cp ~/.bash_profile ~/Documents/bash_profile && cd ~/Documents/bash_profile && git add . && git commit && git push"
 alias editbash="start ~/.bash_profile"
 alias editbashvars="start ~/.bash_vars.sh"
 alias hyperprefs="start C:/Users/Christopher/AppData/Roaming/Hyper/.hyper.js"
 alias updatebash="source ~/.bash_profile && source ~/.bashrc && source ~/.bash_vars.sh"
+
 
 
