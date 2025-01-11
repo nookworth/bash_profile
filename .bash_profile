@@ -35,55 +35,6 @@ alias cdtpg="cd ~/Documents/Travelpass/travelpass.com/"
 alias codetpg="code ~/Documents/Travelpass/travelpass.com/"
 alias rmnpmrc="rm ~/.npmrc"
 alias work="code ~/Documents/Travelpass/travelpass.com/ && start ~/Documents/tpg-dev-portal/release/build/win-unpacked/ElectronReact.exe && start C:/Users/Christopher/AppData/Local/slack/slack.exe && start C:/Users/Christopher/AppData/Local/Figma/Figma.exe && start https://linear.app/travelpass/ && start https://github.com/travelpassgroup/travelpass.com"
-function gs() {
-  local branch_name=$(git symbolic-ref --short HEAD 2>/dev/null | tr '[:lower:]' '[:upper:]')
-  if [ -z "$branch_name" ]; then
-    branch_name="NO_BRANCH"
-  fi
-  git commit -m "${branch_name} [Guide Search] $*"
-}
-function dp() {
-  local branch_name=$(git symbolic-ref --short HEAD 2>/dev/null | tr '[:lower:]' '[:upper:]')
-  if [ -z "$branch_name" ]; then
-    branch_name="NO_BRANCH"
-  fi
-  git commit -m "${branch_name} [Destination Pages] $*"
-}
-function ne() {
-  local branch_name=$(git symbolic-ref --short HEAD 2>/dev/null | tr '[:lower:]' '[:upper:]')
-  if [ -z "$branch_name" ]; then
-    branch_name="NO_BRANCH"
-  fi
-  git commit -m "${branch_name} [New Event] $*"
-}
-function comp() {
-  local branch_name=$(git symbolic-ref --short HEAD 2>/dev/null | tr '[:lower:]' '[:upper:]')
-  if [ -z "$branch_name" ]; then
-    branch_name="NO_BRANCH"
-  fi
-  git commit -m "${branch_name} [Competition]: $*"
-}
-
-# app is short for "append", this is a git commit wrapper
-function app() {
-  source ~/.bash_vars.sh
-  local branch_name=$(git symbolic-ref --short HEAD 2>/dev/null | tr '[:lower:]' '[:upper:]')
-  local var_name="$1" 
-  local value
-
-  if [ -z "$branch_name" ]; then
-    branch_name="NO_BRANCH"
-  fi
-
-  if [[ -n "${!var_name}" ]]; then
-    value="${!var_name}" 
-  else
-    echo "Error: Variable '$var_name' not found."
-    exit 1 
-  fi
-
-  git commit -m "${branch_name} [$value] ${@:2}"
-}
 
 # shows all files with directory specified by argument 2, which have been modified by author
 # specified by argument 1. Argument 2 can be empty to default to "/"
