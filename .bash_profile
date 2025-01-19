@@ -124,6 +124,32 @@ function openpr() {
     rm -f response.json
 }
 
+function builddocker() {
+    local IMAGE_NAME
+    local NPM_TOKEN
+    NPM_TOKEN=$(aws codeartifact get-authorization-token \
+        --domain travelpassgroup \
+        --domain-owner 361429333791 \
+        --query authorizationToken \
+        --region us-west-2 \
+        --output text)
+    
+    if [ -z "$NPM_TOKEN" ]; then
+        echo "Failed to retrieve NPM token. Exiting."
+        return 1
+    fi
+
+    if [ -z "$1" ]; then
+	IMAGE_NAME="emoji-bot"
+    else
+	IMAGE_NAME="$1"
+    fi
+
+    echo "//travelpassgroup-361429333791.d.codeartifact.us-west-2.amazonaws.com/npm/travelpass-design-system/:_authToken=$NPM_TOKEN" > .npmrc
+
+    docker build -t $IMAGE_NAME .
+}
+
 # Misc
 alias cpbash="cp ~/.bash_profile ~/Documents/bash_profile && cd ~/Documents/bash_profile && git add . && git commit && git push"
 alias editbash="start ~/.bash_profile"
