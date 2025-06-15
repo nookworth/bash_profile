@@ -1,0 +1,101 @@
+source ~/.zshrc
+# source ~/.zsh_vars.sh
+test -f ~/.profile && . ~/.profile
+test -f ~/.zshrc && . ~/.zshrc
+
+# function to generate aliases from variables stored in zsh_vars.sh
+# this function is defined in .zsh_vars.sh
+# source_aliases
+
+# Git
+alias addp="git add . && git restore --staged app/gqlClient.server.tsx vite.config.ts"
+alias gc="git commit -m"
+alias gco="git checkout"
+alias gcob="git checkout -b"
+alias pull="git pull"
+alias pullx="git pull origin master --rebase -Xtheirs"
+alias push="git push"
+alias pushf="git push origin HEAD -f"
+alias revise="git commit --amend --no-edit"
+alias stat="git status"
+
+function gitfilter() {
+# shows all files with directory specified by argument 2, which have been modified by author
+# specified by argument 1. Argument 2 can be empty to default to "/"
+    local dir_name
+    if [ -z "$2" ]; then
+        dir_name="/"
+    else
+        dir_name="$2"
+    fi
+    git log --author="$1" --pretty=format: --name-only | sort -u | grep "$dir_name"
+}
+
+function renamelast() {
+    local new_name=$1
+    git commit --amend -m "$new_name"
+}
+
+function sb() {
+# search branches
+    local SEARCH_TERM
+
+    if [ -n "$1" ]; then
+        SEARCH_TERM="$1"
+    else
+        SEARCH_TERM=""
+    fi
+
+    echo "Search term was: $SEARCH_TERM"
+
+    git branch | grep $SEARCH_TERM && git branch -r | grep $SEARCH_TERM
+}
+
+function vcommit() {
+    # verbose commit
+    local commit_message=$1
+    local commit_description=$2
+    git commit -m "$commit_message" -m "" -m "$commit_description"
+}
+
+# Plaza
+alias bard="cd ~/plaza/bard"
+alias volo="cd ~/plaza/volo"
+alias xan="cd ~/plaza/xanathar"
+alias gcloud-volo="gcloud config set project volo-439521 && gcloud auth application-default login && ./cloud-sql-proxy --port 5431 volo-439521:us-west1:volo-dev"
+
+function lint() {
+# $# means number of arguments passed in
+# $@ means all arguments passed in
+# -gt means greater than
+  if [ "$#" -gt 0 ]; then
+    for file in "$@"; do
+      npx eslint "$file" --fix
+      git diff "$file"
+    done
+  else
+    local changed_files
+    changed_files=$(git diff --name-only)
+
+    if [ -z "$changed_files" ]; then
+      echo "No changes detected, running eslint on all files"
+      npx eslint "./app/**/*.{ts,tsx,js,jsx}" --fix
+    else
+      echo "Linting changed files"
+      for file in $changed_files; do
+        if [[ $file == *".ts" || $file == *".tsx" || $file == *".js" || $file == *".jsx" ]]; then
+          npx eslint "$file" --fix
+        fi
+      done
+    fi
+  fi
+}
+
+# Misc
+alias activate="python3 -m venv .venv; source .venv/bin/activate; pip3 install -r requirements.txt;"
+alias editbash="cursor ~/.bash_profile"
+alias editbashvars="cursor ~/.zsh_vars.sh"
+alias updatebash="source ~/.bash_profile && source ~/.bashrc && source ~/.zsh_vars.sh"
+
+
+
